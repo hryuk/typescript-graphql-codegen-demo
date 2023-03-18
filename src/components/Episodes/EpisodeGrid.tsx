@@ -1,39 +1,42 @@
-import { Box, Grid, GridItem } from "@chakra-ui/react";
-import { FragmentType, graphql, useFragment } from "../../gql";
-import { LocationSelector, locationsFragment } from "../LocationSelector";
+import { Box, Grid, GridItem, Spinner } from "@chakra-ui/react";
+import { useQuery } from "urql";
+import { graphql } from "../../gql";
+import { Loading } from "../../Loading";
+import { LocationSelector } from "../LocationSelector";
 import { EpisodeCard } from "./EpisodeCard";
 
-const fragment = graphql(/* GraphQL */ `
-  fragment EpisodeGrid on Episodes {
-    results {
-      ...EpisodeCard
-    }
-    info {
-      count
+const EpisodesDocument = graphql(/* GraphQL */ `
+  query Episodes {
+    episodes {
+      results {
+        id
+      }
+      info {
+        count
+      }
     }
   }
 `);
 
-export const EpisodeGrid: React.FC<{
-  episodes: FragmentType<typeof fragment>;
-  locations: FragmentType<typeof locationsFragment>;
-}> = (props) => {
-  let episodes = useFragment(fragment, props.episodes);
+export const EpisodeGrid: React.FC<{}> = () => {
+  let [{ data }] = useQuery({ query: EpisodesDocument });
 
   return (
-    <>
-      <Box mb="4">{episodes.info?.count} episodes in total</Box>
-      <LocationSelector locations={props.locations} />
-      <Grid paddingTop="20px" templateColumns="repeat(5, 1fr)" gap={6}>
-        {(episodes.results || []).map(
-          (episode) =>
-            episode && (
-              <GridItem>
-                <EpisodeCard episode={episode} />
-              </GridItem>
-            )
-        )}
-      </Grid>
-    </>
+    <Loading loading={!data?.episodes?.results}>
+      <>
+        <Box mb="4">{data?.episodes?.info?.count} episodes in total</Box>
+        <LocationSelector />
+        <Grid paddingTop="20px" templateColumns="repeat(5, 1fr)" gap={6}>
+          {(data?.episodes?.results || []).map(
+            (episode) =>
+              episode && (
+                <GridItem key={episode.id}>
+                  <EpisodeCard id={episode.id!} />
+                </GridItem>
+              )
+          )}
+        </Grid>
+      </>
+    </Loading>
   );
 };

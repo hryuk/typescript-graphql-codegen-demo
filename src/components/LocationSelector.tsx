@@ -1,32 +1,32 @@
-import { FragmentType, graphql, useFragment } from "../gql";
+import { graphql } from "../gql";
 import { Select } from "@chakra-ui/react";
+import { useQuery } from "urql";
+import { Loading } from "../Loading";
 
-export const locationsFragment = graphql(/* GraphQL */ `
-  fragment LocationSelector on Locations {
-    results {
-      id
-      name
-      dimension
-    }
-    info {
-      count
+const LocationsDocument = graphql(/* GraphQL */ `
+  query Locations {
+    locations {
+      results {
+        id
+        name
+      }
     }
   }
 `);
 
-export const LocationSelector: React.FC<{
-  locations: FragmentType<typeof locationsFragment>;
-}> = (props) => {
-  let locations = useFragment(locationsFragment, props.locations);
+export const LocationSelector: React.FC<{}> = () => {
+  const [{ data }] = useQuery({ query: LocationsDocument });
 
   return (
-    <Select placeholder="Select a location">
-      {locations.results &&
-        locations.results.map((location) => (
-          <option key={location?.id} value={location?.name!}>
-            {location?.name}
-          </option>
-        ))}
-    </Select>
+    <Loading loading={!data?.locations}>
+      <Select placeholder="Select a location">
+        {data?.locations?.results &&
+          data?.locations?.results.map((location) => (
+            <option key={location?.id} value={location?.name!}>
+              {location?.name}
+            </option>
+          ))}
+      </Select>
+    </Loading>
   );
 };

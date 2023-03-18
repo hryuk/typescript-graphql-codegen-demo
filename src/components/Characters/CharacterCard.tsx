@@ -1,24 +1,31 @@
-import { FragmentType, graphql, useFragment } from "../../gql";
+import { graphql } from "../../gql";
 import { Card, CardBody, Image } from "@chakra-ui/react";
+import { useQuery } from "urql";
+import { Loading } from "../../Loading";
 
-const fragment = graphql(/* GraphQL */ `
-  fragment CharacterCard on Character {
-    name
-    image
+const CharacterDocument = graphql(/* GraphQL */ `
+  query Character($id: ID!) {
+    character(id: $id) {
+      name
+      image
+    }
   }
 `);
 
-export const CharacterCard: React.FC<{
-  character: FragmentType<typeof fragment>;
-}> = ({ character }) => {
-  let { image, name } = useFragment(fragment, character);
+export const CharacterCard: React.FC<{ id: string }> = ({ id }) => {
+  let [{ data }] = useQuery({
+    query: CharacterDocument,
+    variables: { id },
+  });
 
   return (
-    <Card>
-      <CardBody>
-        {name}
-        {image && <Image src={image} />}
-      </CardBody>
-    </Card>
+    <Loading loading={!data?.character}>
+      <Card>
+        <CardBody>
+          {data?.character?.name}
+          {data?.character?.image && <Image src={data.character.image} />}
+        </CardBody>
+      </Card>
+    </Loading>
   );
 };

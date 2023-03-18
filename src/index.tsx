@@ -11,12 +11,7 @@ const client = createClient({
   exchanges: [
     devtoolsExchange,
     dedupExchange,
-    cacheExchange({
-      keys: {
-        Location: () => null,
-        Characters: () => null,
-      },
-    }),
+    //cacheExchange({}),
     fetchExchange,
   ],
 });

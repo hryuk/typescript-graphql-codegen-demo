@@ -13,12 +13,12 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  fragment CharacterCard on Character {\n    name\n    image\n  }\n": types.CharacterCardFragmentDoc,
-    "\n  fragment CharacterGrid on Characters {\n    results {\n      ...CharacterCard\n    }\n    info {\n      count\n    }\n  }\n": types.CharacterGridFragmentDoc,
-    "\n  fragment EpisodeCard on Episode {\n    id\n    name\n  }\n": types.EpisodeCardFragmentDoc,
-    "\n  fragment EpisodeGrid on Episodes {\n    results {\n      ...EpisodeCard\n    }\n    info {\n      count\n    }\n  }\n": types.EpisodeGridFragmentDoc,
-    "\n  fragment LocationSelector on Locations {\n    results {\n      id\n      name\n      dimension\n    }\n    info {\n      count\n    }\n  }\n": types.LocationSelectorFragmentDoc,
-    "\n  query CharactersIndex {\n    characters {\n      ...CharacterGrid\n    }\n    episodes {\n      ...EpisodeGrid\n    }\n    locations {\n      ...LocationSelector\n    }\n  }\n": types.CharactersIndexDocument,
+    "\n  query Character($id: ID!) {\n    character(id: $id) {\n      name\n      image\n    }\n  }\n": types.CharacterDocument,
+    "\n  query Characters {\n    characters {\n      results {\n        id\n        name\n        image\n      }\n      info {\n        count\n      }\n    }\n  }\n": types.CharactersDocument,
+    "\n  query Episode($id: ID!) {\n    episode(id: $id) {\n      id\n      name\n    }\n  }\n": types.EpisodeDocument,
+    "\n  query Episodes {\n    episodes {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n  }\n": types.EpisodesDocument,
+    "\n  query Locations {\n    locations {\n      results {\n        id\n        name\n      }\n    }\n  }\n": types.LocationsDocument,
+    "\n  query CharactersIndex {\n    characters {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n    episodes {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n    locations {\n      results {\n        id\n        name\n      }\n    }\n  }\n": types.CharactersIndexDocument,
 };
 
 /**
@@ -38,27 +38,27 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment CharacterCard on Character {\n    name\n    image\n  }\n"): (typeof documents)["\n  fragment CharacterCard on Character {\n    name\n    image\n  }\n"];
+export function graphql(source: "\n  query Character($id: ID!) {\n    character(id: $id) {\n      name\n      image\n    }\n  }\n"): (typeof documents)["\n  query Character($id: ID!) {\n    character(id: $id) {\n      name\n      image\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment CharacterGrid on Characters {\n    results {\n      ...CharacterCard\n    }\n    info {\n      count\n    }\n  }\n"): (typeof documents)["\n  fragment CharacterGrid on Characters {\n    results {\n      ...CharacterCard\n    }\n    info {\n      count\n    }\n  }\n"];
+export function graphql(source: "\n  query Characters {\n    characters {\n      results {\n        id\n        name\n        image\n      }\n      info {\n        count\n      }\n    }\n  }\n"): (typeof documents)["\n  query Characters {\n    characters {\n      results {\n        id\n        name\n        image\n      }\n      info {\n        count\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment EpisodeCard on Episode {\n    id\n    name\n  }\n"): (typeof documents)["\n  fragment EpisodeCard on Episode {\n    id\n    name\n  }\n"];
+export function graphql(source: "\n  query Episode($id: ID!) {\n    episode(id: $id) {\n      id\n      name\n    }\n  }\n"): (typeof documents)["\n  query Episode($id: ID!) {\n    episode(id: $id) {\n      id\n      name\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment EpisodeGrid on Episodes {\n    results {\n      ...EpisodeCard\n    }\n    info {\n      count\n    }\n  }\n"): (typeof documents)["\n  fragment EpisodeGrid on Episodes {\n    results {\n      ...EpisodeCard\n    }\n    info {\n      count\n    }\n  }\n"];
+export function graphql(source: "\n  query Episodes {\n    episodes {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n  }\n"): (typeof documents)["\n  query Episodes {\n    episodes {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  fragment LocationSelector on Locations {\n    results {\n      id\n      name\n      dimension\n    }\n    info {\n      count\n    }\n  }\n"): (typeof documents)["\n  fragment LocationSelector on Locations {\n    results {\n      id\n      name\n      dimension\n    }\n    info {\n      count\n    }\n  }\n"];
+export function graphql(source: "\n  query Locations {\n    locations {\n      results {\n        id\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query Locations {\n    locations {\n      results {\n        id\n        name\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query CharactersIndex {\n    characters {\n      ...CharacterGrid\n    }\n    episodes {\n      ...EpisodeGrid\n    }\n    locations {\n      ...LocationSelector\n    }\n  }\n"): (typeof documents)["\n  query CharactersIndex {\n    characters {\n      ...CharacterGrid\n    }\n    episodes {\n      ...EpisodeGrid\n    }\n    locations {\n      ...LocationSelector\n    }\n  }\n"];
+export function graphql(source: "\n  query CharactersIndex {\n    characters {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n    episodes {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n    locations {\n      results {\n        id\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query CharactersIndex {\n    characters {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n    episodes {\n      results {\n        id\n      }\n      info {\n        count\n      }\n    }\n    locations {\n      results {\n        id\n        name\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
