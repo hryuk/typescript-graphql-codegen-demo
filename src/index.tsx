@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { CharactersIndexPage } from "./pages/CharactersIndex";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Spinner } from "@chakra-ui/react";
 import { createClient, dedupExchange, fetchExchange, Provider } from "urql";
 import { devtoolsExchange } from "@urql/devtools";
 import { cacheExchange } from "@urql/exchange-graphcache";
@@ -14,14 +14,17 @@ const client = createClient({
     //cacheExchange({}),
     fetchExchange,
   ],
+  suspense: true,
 });
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider>
-      <Provider value={client}>
-        <CharactersIndexPage />
-      </Provider>
+      <Suspense fallback={<Spinner />}>
+        <Provider value={client}>
+          <CharactersIndexPage />
+        </Provider>
+      </Suspense>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById("root")
